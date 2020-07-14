@@ -1,5 +1,6 @@
 package home.dwatkins.javatries;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Trie {
@@ -54,15 +55,22 @@ public class Trie {
 		}
 	}
 	
-	public Set<Character> getKeys(Set<Character> keys) {
+	public Set<Character> getKeys(Node startNode) {
+		Set<Character> keys = startNode.children.keySet();
+		Set<Character> addKeys = new HashSet<Character>();
 		for (Character key : keys) {
-			
+			Set<Character> newKeys = getKeys(startNode.children.get(key));
+			addKeys.addAll(newKeys);
 		}
-		
-		return keys;
+		addKeys.addAll(addKeys);
+		addKeys.addAll(keys);
+		return addKeys;
 	}
 	
 	public void printAllKeys() {
-		
+		Set<Character> allKeys = getKeys(this.root);
+		for (Character key : allKeys) {
+			System.out.println(key);
+		}
 	}
 }
